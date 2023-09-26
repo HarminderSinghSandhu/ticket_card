@@ -2,7 +2,7 @@ name: ticket_card
 description: A ticket-like card widget that we can use to create something like a train or movie ticket interface
 version: 0.2.0
 author: roofshelter.au
-homepage: https://github.com/flutter-studio/ticket_card.git
+homepage: https://github.com/HarminderSinghSandhu/ticket_card.git
 
 environment:
   sdk: ">=2.12.0 <4.0.0"
