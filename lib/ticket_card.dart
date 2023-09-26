@@ -7,10 +7,12 @@ import 'package:path_drawing/path_drawing.dart';
 
 /// 用于显示票式卡片的组件
 class TicketCard extends StatelessWidget {
+
+
   TicketCard({
     this.lineFromTop = 0,
     this.lineRadius = 10,
-    this.lineColor,
+    this.lineColor=Colors.black54,
     this.child,
     this.decoration,
   });
@@ -21,13 +23,13 @@ class TicketCard extends StatelessWidget {
   /// 分隔线两边的圆角半径
   final double lineRadius;
 
-  final Widget child;
+  Widget? child;
 
   /// 票式卡片的装饰器
-  final TicketDecoration decoration;
+  final TicketDecoration? decoration;
 
   /// 分割线颜色
-  final Color lineColor;
+  final Color lineColor ;
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +56,8 @@ class TicketCard extends StatelessWidget {
 /// 半圆剪切
 class SemiCircleClipper extends CustomClipper<Path> {
   SemiCircleClipper({
-    this.fromTop,
-    this.radius,
+    required this.fromTop,
+    required this.radius,
   });
 
   /// 距顶部的距离
@@ -93,26 +95,26 @@ class SemiCircleClipper extends CustomClipper<Path> {
 /// 绘制背景阴影
 class ShadowPainter extends CustomPainter {
   ShadowPainter({
-    this.clipper,
-    TicketDecoration decoration,
-  }) : _decoration = decoration ?? TicketDecoration();
+    required this.clipper,
+    TicketDecoration? decoration,
+  }) : _decoration = decoration ?? TicketDecoration(border: TicketBorder(color: Colors.black54, width: 2, style: null));
 
-  final CustomClipper<Path> clipper;
+  late CustomClipper<Path> clipper;
 
-  final TicketDecoration _decoration;
+  TicketDecoration _decoration;
 
-  TicketBorder get _border => _decoration.border;
+  TicketBorder? get _border => _decoration.border;
 
   @override
   void paint(Canvas canvas, Size size) {
     if (_border != null) {
-      if (_border.style == TicketBorderStyle.none) return;
+      if (_border?.style == TicketBorderStyle.none) return;
       Paint paint = Paint()
-        ..color = _border.color ?? Colors.black
-        ..strokeWidth = _border.width ?? 0.5
+        ..color = _border?.color ?? Colors.black
+        ..strokeWidth = _border?.width ?? 0.5
         ..style = PaintingStyle.stroke;
       Path path = clipper.getClip(size);
-      switch (_border.style) {
+      switch (_border?.style) {
         case TicketBorderStyle.none:
           return;
         case TicketBorderStyle.solid:
@@ -137,10 +139,10 @@ class ShadowPainter extends CustomPainter {
 /// 绘制票式卡片虚线
 class SeparatorPainter extends CustomPainter {
   SeparatorPainter({
-    this.clipper,
-    this.fromTop,
-    this.radius,
-    this.color,
+    required this.clipper,
+    required this.fromTop,
+    required this.radius,
+    required this.color,
   });
   final CustomClipper<Path> clipper;
 
@@ -174,15 +176,15 @@ class SeparatorPainter extends CustomPainter {
 /// 票式卡片的阴影类
 class TicketShadow {
   TicketShadow({
-    this.color,
-    this.elevation,
+    required this.color,
+      this.elevation=0,
   });
 
   /// 阴影颜色
   final Color color;
 
   /// 阴影的高程
-  final double elevation;
+    double elevation=0;
 }
 
 /// 票式卡片border类型
@@ -190,24 +192,24 @@ enum TicketBorderStyle { none, solid, dotted }
 
 class TicketBorder {
   TicketBorder({
-    this.color,
-    this.width,
-    this.style,
+    required this.color,
+    required this.width,
+    required this.style,
   });
   final Color color;
   final double width;
-  final TicketBorderStyle style;
+  TicketBorderStyle? style;
 }
 
 class TicketDecoration {
   TicketDecoration({
     this.shadow = const [],
-    this.border,
+     this.border,
   });
 
   /// 卡片背景阴影
   final List<TicketShadow> shadow;
 
   /// 卡片的边框
-  final TicketBorder border;
+    TicketBorder? border = TicketBorder(color: Colors.black54, width: 2, style: null);
 }
